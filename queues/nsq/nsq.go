@@ -10,8 +10,14 @@ import (
 	"github.com/nsqio/go-nsq"
 )
 
-// DefaultTCPAddr is the default NSQ TCP address.
-const DefaultTCPAddr = "localhost:4150"
+// defaultTCPAddr is the default NSQ TCP address.
+// const DefaultTCPAddr = "localhost:4150"
+
+var defaultTCPAddr = "172.17.0.1:4150"
+
+func SetViceAddr(addr string) {
+	defaultTCPAddr = addr
+}
 
 // make sure Transport satisfies vice.Transport interface.
 var _ vice.Transport = (*Transport)(nil)
@@ -59,13 +65,13 @@ func New() *Transport {
 		consumers: []*nsq.Consumer{},
 
 		NewProducer: func() (*nsq.Producer, error) {
-			return nsq.NewProducer(DefaultTCPAddr, nsq.NewConfig())
+			return nsq.NewProducer(defaultTCPAddr, nsq.NewConfig())
 		},
 		NewConsumer: func(name string) (*nsq.Consumer, error) {
 			return nsq.NewConsumer(name, "vice", nsq.NewConfig())
 		},
 		ConnectConsumer: func(consumer *nsq.Consumer) error {
-			return consumer.ConnectToNSQD(DefaultTCPAddr)
+			return consumer.ConnectToNSQD(defaultTCPAddr)
 		},
 	}
 }
