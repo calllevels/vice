@@ -2,6 +2,7 @@
 package nsq
 
 import (
+	"log"
 	"sync"
 	"time"
 
@@ -17,6 +18,14 @@ var defaultTCPAddr = "172.17.0.1:4150"
 
 func SetViceAddr(addr string) {
 	defaultTCPAddr = addr
+}
+
+func GetViceAddr() string {
+	return defaultTCPAddr
+}
+
+func init() {
+	log.Println("[vice/nsq] defaultTCPAddr ->", defaultTCPAddr)
 }
 
 // make sure Transport satisfies vice.Transport interface.
